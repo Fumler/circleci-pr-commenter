@@ -3,4 +3,4 @@
 const Commenter = require('./dist/index.js')
 
 const commenter = new Commenter()
-commenter.createOrUpdateComment('test', 'Testerino. #4')
+commenter.createOrUpdateComment('test', '## Test\n\nTesterino. #9')

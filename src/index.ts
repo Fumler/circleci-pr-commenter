@@ -1,5 +1,4 @@
 import ghGot from 'gh-got'
-import { strict } from 'assert'
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
@@ -73,14 +72,16 @@ class Commenter {
       repo: process.env.CIRCLE_PROJECT_REPONAME,
       branch: process.env.CIRCLE_BRANCH,
       buildURL: process.env.CIRCLE_BUILD_URL,
-      pr: parseInt(process.env.CIRCLE_PULL_REQUEST) || null,
+      pr: parseInt(process.env.CIRCLE_PULL_REQUEST) || undefined,
       token: process.env.GITHUB_TOKEN,
       tokenUserName: process.env.GITHUB_TOKEN_USERNAME,
       sha1: process.env.CIRCLE_SHA1,
       home: process.env.HOME,
     }
 
-    const missing = REQUIRED_ENVIRONMENT_VARS.filter(key => !this.env[key])
+    const missing = REQUIRED_ENVIRONMENT_VARS.filter(key => {
+      return !this.env[key]
+    })
     if (missing.length > 0) {
       throw new Error('Missing environment variables:\n' + missing.join(', '))
     }
@@ -123,21 +124,22 @@ class Commenter {
   }
 
   public getArtifactURL(path: string): string {
-    return `${this.env.buildURL}/artifacts/0/${this.env.home}/${path}`
+    return `${this.env.buildURL}/artifacts/0${this.env.home}${path}`
   }
 
   public async createOrUpdateComment(key: string, message: string) {
     const comments = await this.getComments()
     const existingComment = this.getExistingComment(comments)
-    const data = this.getDataForKey(key, existingComment.body)
 
-    let comment = `<!-- start:${key} -->${message}<!-- end:${key} -->`
+    const originalMessage = `<!-- start:${key} -->${message}<!-- end:${key} -->`
+    let comment = originalMessage
     if (existingComment) {
       comment = existingComment.body
+      const data = this.getDataForKey(key, existingComment.body)
       if (data) {
         comment = comment.replace(data, message)
       } else {
-        comment = `${comment}\n\n${message}`
+        comment = `${comment}\n\n${originalMessage}`
       }
     }
 
@@ -145,15 +147,13 @@ class Commenter {
       const url = existingComment
         ? `repos/${this.env.userName}/${this.env.repo}/issues/comments/${existingComment.id}`
         : `repos/${this.env.userName}/${this.env.repo}/issues/${this.env.pr}/comments`
-      const response: Request = await ghGot(url, {
+      await ghGot(url, {
         token: process.env.GITHUB_TOKEN,
         body: {
           body: comment,
         },
         method: existingComment ? 'PATCH' : 'POST',
       })
-
-      console.log(response.body)
     } catch (error) {
       throw error
     }

@@ -6,16 +6,19 @@
   },
   "scripts": {
     "build": "del-cli dist && tsc",
-    "test": "eslint src/** --max-warnings=0 && nyc ava",
+    "test": "yarn test:lint && yarn test:ava",
+    "test:ava": "nyc ava",
+    "test:lint": "eslint src/** --max-warnings=0",
     "coverage": "nyc report --reporter=lcov",
     "release": "np",
     "prepublishOnly": "npm run build"
   },
   "description": "A library that lets you post comments to your GitHub pull request from CircleCI",
-  "main": "dist",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/Fumler/pr-commenter.git",
   "author": "Fredrik Pettersen <fredrik.fumler@gmail.com>",
   "license": "MIT",
@@ -52,7 +55,7 @@
     "printWidth": 110
   },
   "ava": {
-    "compileENhancements": false,
+    "compileEnhancements": false,
     "extensions": [
       "ts"
     ],
@@ -80,6 +83,7 @@
     "eslint": "^5.14.1",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "nock": "^10.0.6",
     "np": "^4.0.2",
     "nyc": "^13.3.0",
     "prettier": "^1.16.4",

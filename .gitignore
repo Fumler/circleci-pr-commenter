@@ -3,3 +3,5 @@ node_modules
 dist
 .nyc_output
 .env
+env.sh
+yarn-error.log

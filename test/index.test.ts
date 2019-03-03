@@ -30,7 +30,7 @@ test('createOrUpdateComment - Creates a new comment', async t => {
     .reply(200, [])
     .post('/repos/fumler/circleci-pr-commenter/issues/15/comments')
     .reply(201, function(uri, requestBody) {
-      t.deepEqual(requestBody, { body: '<!-- start:test -->This is a test.<!-- end:test -->' })
+      t.deepEqual(requestBody, { body: '\n<!-- start:test -->\nThis is a test.\n<!-- end:test -->\n' })
       return [201, {}]
     })
 
@@ -68,7 +68,7 @@ test('createOrUpdateComment - Updates a comment without existing key', async t =
     .patch('/repos/fumler/circleci-pr-commenter/issues/comments/1')
     .reply(function(uri, requestBody) {
       t.deepEqual(requestBody, {
-        body: 'This is an exisiting comment.\n\n<!-- start:test -->This is a test.<!-- end:test -->',
+        body: 'This is an exisiting comment.\n\n\n<!-- start:test -->\nThis is a test.\n<!-- end:test -->\n',
       })
       return [200, {}]
     })

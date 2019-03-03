@@ -95,7 +95,7 @@ class Commenter {
       repo: process.env.CIRCLE_PROJECT_REPONAME,
       branch: process.env.CIRCLE_BRANCH,
       buildURL: process.env.CIRCLE_BUILD_URL,
-      pr: parseInt(basename(process.env.CIRCLE_PULL_REQUEST || "")) || undefined,
+      pr: parseInt(basename(process.env.CIRCLE_PULL_REQUEST || '')) || undefined,
       token: process.env.GITHUB_TOKEN,
       tokenUserName: process.env.GITHUB_TOKEN_USERNAME,
       sha1: process.env.CIRCLE_SHA1,

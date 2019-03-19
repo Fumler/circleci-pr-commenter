@@ -19,7 +19,7 @@
     "dist"
   ],
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/Fumler/pr-commenter.git",
+  "repository": "https://github.com/Fumler/circleci-pr-commenter.git",
   "author": "Fredrik Pettersen <fredrik.fumler@gmail.com>",
   "license": "MIT",
   "keywords": [

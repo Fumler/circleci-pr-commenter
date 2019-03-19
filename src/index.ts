@@ -197,7 +197,7 @@ class Commenter {
     const comments = await this.getComments()
     const existingComment = this.getExistingComment(comments)
 
-    const formattedMessage = `\n<!-- start:${key} -->\n${message}\n<!-- end:${key} -->\n`
+    const formattedMessage = `\n<!-- start:${key} -->\n${message}\n<!-- end:${key} -->`
     let comment = formattedMessage
     if (existingComment) {
       comment = existingComment.body
@@ -205,7 +205,7 @@ class Commenter {
       if (data) {
         comment = comment.replace(data, message)
       } else {
-        comment = `${comment}\n\n${formattedMessage}`
+        comment = `${comment}\n${formattedMessage}`
       }
     }
 
